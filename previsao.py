@@ -40,6 +40,14 @@ def get_previsao(id):
     return df
 
 
+def make_fig(prev, dados):
+    fig = px.line(prev, 'dia', ['maxima', 'minima'], color='cidade', 
+                  color_discrete_sequence=dados['color'].tolist(), 
+                  hover_data=['iuv', 'Descrição'])
+    fig.update_yaxes(title="Temperatura")
+    return fig
+
+
 st.set_page_config(layout='wide')
 st.title('Previsão do tempo e Localização')
 df = get_coord()
@@ -49,6 +57,6 @@ dados = df[df['id'].isin(cidades)]
 if not dados.empty:
     cols[1].dataframe(dados[['nome', 'nome_est', 'regiao', 'ddd', 'latitude', 'longitude']], hide_index=True, width=500)
     prev = get_previsao(dados)
-    cols[0].plotly_chart(px.line(prev, 'dia', ['maxima', 'minima'], color='cidade', color_discrete_sequence=dados['color'].tolist(), hover_data=['iuv', 'Descrição']))
+    cols[0].plotly_chart(make_fig(prev, dados))
     cols[0].write('dados: CPTEC/INPE')
     cols[1].map(dados.reset_index(), zoom=3, color='color')
