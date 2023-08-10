@@ -6,7 +6,7 @@ import colorcet as cc
 
 @st.cache_data
 def get_siglas():
-    df = pd.read_csv('.\\sigla.csv')
+    df = pd.read_csv('./sigla.csv')
     df = df.rename(columns={'Sigla': 'tempo'})
     df = df.set_index('tempo')
     return df
